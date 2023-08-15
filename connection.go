@@ -3,13 +3,19 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 )
 
-const (
-	loginurl = "https://apiconnect.angelbroking.com/rest/auth/angelbroking/user/v1/loginByPassword"
-)
+type ConnectionResponse struct {
+	BaseResponse
+	Data struct {
+		JwtToken     string
+		RefreshToken string
+		FeedToken    string
+	}
+}
 
 func (c *Client) Connect() (data ConnectionResponse, err error) {
 	requestData, err := json.Marshal(c.credentials)
@@ -17,7 +23,7 @@ func (c *Client) Connect() (data ConnectionResponse, err error) {
 		return
 	}
 
-	request, err := http.NewRequest(http.MethodPost, loginurl, bytes.NewBuffer(requestData))
+	request, err := http.NewRequest(http.MethodPost, "https://apiconnect.angelbroking.com/rest/auth/angelbroking/user/v1/loginByPassword", bytes.NewBuffer(requestData))
 	if err != nil {
 		return
 	}
@@ -45,4 +51,8 @@ func (c *Client) Connect() (data ConnectionResponse, err error) {
 	c.tokens.feed = data.Data.FeedToken
 
 	return
+}
+
+func (cr ConnectionResponse) String() string {
+	return fmt.Sprintf("Auth Tokens:\n- JWT Token: %s\n- Refresh Token: %s\n- Feed Token: %s", cr.Data.JwtToken, cr.Data.RefreshToken, cr.Data.FeedToken)
 }

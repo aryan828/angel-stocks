@@ -33,4 +33,12 @@ func main() {
 		return
 	}
 	fmt.Println(profile)
+
+	stock.History(map[string]string{
+		"exchange":    "NSE",
+		"symboltoken": "3045",
+		"interval":    "ONE_MINUTE",
+		"fromdate":    "2021-02-15 09:15",
+		"todate":      "2021-02-15 09:16",
+	})
 }
