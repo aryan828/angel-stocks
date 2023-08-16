@@ -9,6 +9,22 @@ import (
 	"time"
 )
 
+const (
+	NSE = "NSE"
+	NFO = "NFO"
+)
+
+const (
+	ONE_MINUTE     = "ONE_MINUTE"
+	THREE_MINUTE   = "THREE_MINUTE"
+	FIVE_MINUTE    = "FIVE_MINUTE"
+	TEN_MINUTE     = "TEN_MINUTE"
+	FIFTEEN_MINUTE = "FIFTEEN_MINUTE"
+	THIRTY_MINUTE  = "THIRTY_MINUTE"
+	ONE_HOUR       = "ONE_HOUR"
+	ONE_DAY        = "ONE_DAY"
+)
+
 type Record struct {
 	Timestamp time.Time
 	Open      float64
@@ -23,7 +39,14 @@ type HistoricalDataResponse struct {
 	Data []Record
 }
 
-func (c *Client) History(payload map[string]string) (data HistoricalDataResponse, err error) {
+func (c *Client) History(exchange, symbol, interval, from, to string) (data HistoricalDataResponse, err error) {
+	payload := map[string]string{
+		"exchange":    exchange,
+		"symboltoken": symbol,
+		"interval":    interval,
+		"fromdate":    from,
+		"todate":      to,
+	}
 	requestData, err := json.Marshal(payload)
 	if err != nil {
 		return
@@ -75,4 +98,8 @@ func (r *Record) UnmarshalJSON(data []byte) error {
 	r.Volume = int64(v[5].(float64))
 
 	return nil
+}
+
+func (r Record) String() string {
+	return fmt.Sprintf("{\n\ttime: %s\n\topen: %f\n\thigh: %f\n\tlow: %f\n\tclose: %f\n\tvolume: %d\n}", r.Timestamp, r.Open, r.High, r.Low, r.Close, r.Volume)
 }

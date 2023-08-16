@@ -34,11 +34,9 @@ func main() {
 	}
 	fmt.Println(profile)
 
-	stock.History(map[string]string{
-		"exchange":    "NSE",
-		"symboltoken": "3045",
-		"interval":    "ONE_MINUTE",
-		"fromdate":    "2021-02-15 09:15",
-		"todate":      "2021-02-15 09:16",
-	})
+	data, err := stock.History(NSE, "3045", ONE_MINUTE, "2021-02-10 09:15", "2021-02-10 09:25")
+	if err != nil {
+		return
+	}
+	fmt.Println(data)
 }
