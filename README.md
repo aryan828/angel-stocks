@@ -1,10 +1,5 @@
 # angel-stocks
 
-Go library for AngelOne SmartAPI
+Go library for fetching historical data from AngelOne SmartAPI
 
-> This is not the official library. I made this as I was learning GoLang.
-
-## TODO
-
-- [ ] Add live market feed.
-- [ ] Add order placement.
+> This is not the official library. I made this when I was learning GoLang.
