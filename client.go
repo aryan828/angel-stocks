@@ -9,19 +9,31 @@ import (
 
 type Client struct {
 	apiKey      string
-	client      http.Client
 	credentials map[string]string
-	tokens      struct {
+
+	tokens struct {
 		jwt     string
 		refresh string
 		feed    string
 	}
+	client http.Client
 }
 
 type BaseResponse struct {
 	Status    bool
 	Message   string
 	ErrorCode string
+}
+
+func NewClient(clientCode, password, totp, apiKey string) Client {
+	var client Client
+	client.credentials = map[string]string{
+		"clientcode": clientCode,
+		"password":   password,
+		"totp":       totp,
+	}
+	client.apiKey = apiKey
+	return client
 }
 
 func (c *Client) setHeaders(req *http.Request) {
